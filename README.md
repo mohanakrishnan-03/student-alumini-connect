@@ -7,7 +7,7 @@ This is a full stack web application built to manage and connect alumni.
 ## 🌐 Live Demo
 
 - 🔗 Frontend: http://localhost:3000  
-- 🔗 Backend API: http://localhost:5000  
+ 
 
 ---
 
