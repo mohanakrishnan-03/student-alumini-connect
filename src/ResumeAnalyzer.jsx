@@ -10,7 +10,7 @@ const ResumeAnalyzer = () => {
   const [error, setError] = useState('');
 
   // Backend API URL
-  const API_URL = 'http://localhost:5000/api/analyze-resume';
+  const API_URL = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/analyze-resume`;
 
   const handleFileUpload = async (file) => {
     if (!file) return;

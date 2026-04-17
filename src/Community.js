@@ -44,7 +44,7 @@ const Community = () => {
   const fetchPosts = async () => {
     if (!token) return;
     try {
-      const response = await fetch('http://localhost:5000/api/community', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/community`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -75,7 +75,7 @@ const Community = () => {
 
   const sendPostToBackend = async (postData) => {
     try {
-      const response = await fetch('http://localhost:5000/api/community', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/community`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

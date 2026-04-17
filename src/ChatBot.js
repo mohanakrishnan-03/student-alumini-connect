@@ -14,7 +14,7 @@ const ChatBot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const chatBoxRef = useRef(null);
 
-  const API_URL = 'http://localhost:5000/api/chat';
+  const API_URL = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/chat`;
 
   useEffect(() => {
     if (chatBoxRef.current) {

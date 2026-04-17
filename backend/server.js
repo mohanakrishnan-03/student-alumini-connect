@@ -31,5 +31,5 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/alumnicon
 .then(() => console.log('✅ MongoDB connected successfully'))
 .catch(err => console.log('❌ MongoDB connection error:', err));
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
