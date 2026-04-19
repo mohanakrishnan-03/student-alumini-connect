@@ -1,35 +1,25 @@
-# Alumni Portal
+Alumni Portal – Full Stack Web Application
 
-This is a full stack web application built to manage and connect alumni.
+A modern full-stack web application designed to connect alumni, students, and administrators through a centralized platform. This system enables seamless communication, profile management, and alumni engagement.
 
----
+Overview
 
-## 🌐 Live Demo
+The Alumni Portal provides a digital space where alumni can stay connected with their institution and peers. It supports user authentication, profile management, and structured data handling through a scalable architecture.
 
-- 🔗 Frontend: http://localhost:3000  
- 
+ Live Demo
+Frontend: http://localhost:3000
 
----
-
-## Tech Stack
-
-### Frontend
-The frontend is built using React.js. It handles the user interface and pages like login, registration, and dashboard. Components are used to keep the UI structured and reusable.
-
-### Backend
-The backend is developed using Node.js and Express.js. It handles API requests, processes data, and connects the frontend with the database.
-
-### Database
-The project uses MongoDB as the database. It stores user data such as login details and profile information in JSON format.
-
-### Integration
-The frontend and backend are connected using REST APIs. React sends requests and the backend responds with data from MongoDB.
-
----
-
-## Project Structure
-
-alumni-portal/
-│
-├── src/        (React frontend)
-├── backend/    (Node.js backend)
+ Tech Stack
+🔹 Frontend
+React.js
+Component-based architecture for reusable UI
+Handles routing, forms, and user interactions
+🔹 Backend
+Node.js
+Express.js
+RESTful API design
+Handles authentication, business logic, and API requests
+🔹 Database
+MongoDB
+Stores user data (profiles, login credentials, etc.)
+Uses JSON-like documents for flexibility
