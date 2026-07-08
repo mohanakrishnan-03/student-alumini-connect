@@ -6,13 +6,18 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
+const defaultOrigins = [
+  'http://localhost:3000',
+  'https://student-alumini-connect-production.up.railway.app'
+];
+
 const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',')
-  : ['http://localhost:3000'];
+  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+  : defaultOrigins;
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman, curl)
+    // Allow requests with no origin (Postman, curl, server-to-server)
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
@@ -20,8 +25,13 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+// Handle OPTIONS preflight
+app.options('*', cors());
+
 app.use(express.json());
 
 

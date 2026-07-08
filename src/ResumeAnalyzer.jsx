@@ -52,7 +52,7 @@ const ResumeAnalyzer = () => {
       setAnalysis(result);
     } catch (error) {
       console.error('Analysis failed:', error);
-      setError(error.message || 'Failed to analyze resume. Please check if the backend is running on port 5000.');
+      setError(error.message || 'Failed to analyze resume. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -100,7 +100,7 @@ const ResumeAnalyzer = () => {
       const result = await response.json();
       alert(`Backend connection: ${result.status}\n${result.message}`);
     } catch (error) {
-      alert('Backend connection failed. Make sure the Node.js server is running on port 5000.');
+      alert('Unable to connect to the server. Please try again later.');
     }
   };
 
@@ -163,7 +163,7 @@ const ResumeAnalyzer = () => {
         <div className="error-message">
           ⚠️ {error}
           <br />
-          <small>Make sure the Node.js backend is running on port 5000</small>
+          <small>Please try again. If the problem persists, the server may be temporarily unavailable.</small>
         </div>
       )}
       

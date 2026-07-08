@@ -142,8 +142,8 @@ ${fileContent}`;
   }
 });
 
-// Chat endpoint for AI Career Assistant
-router.post('/chat', async (req, res) => {
+// Chat endpoint for AI Career Assistant (AI chatbot - distinct from user-to-user /api/chat)
+router.post('/chatbot', async (req, res) => {
   try {
     const { messages } = req.body;
     if (!messages || !Array.isArray(messages)) {

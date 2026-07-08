@@ -15,7 +15,7 @@ const ChatBot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const chatBoxRef = useRef(null);
 
-  const API_URL = `${API_BASE_URL}/api/chat`;
+  const API_URL = `${API_BASE_URL}/api/chatbot`;
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -61,7 +61,7 @@ const ChatBot = () => {
       const cleanReply = (data.reply || "Sorry, I couldn't process that.").replace(/[*_#`]/g, '');
       addMessage(cleanReply, 'bot');
     } catch (error) {
-      addMessage('Connection error. Make sure the backend is running on port 5000.', 'bot');
+      addMessage('Unable to connect to the server. Please try again later.', 'bot');
     } finally {
       setIsLoading(false);
     }
