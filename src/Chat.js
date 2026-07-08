@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 import "./Chat.css";
+import API_BASE_URL from "./config";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Chat = () => {
   const fetchMessages = async (userId) => {
     if (!token || !userId) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/chat/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/chat/${userId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -88,7 +89,7 @@ const Chat = () => {
     setInput(""); // Clear input immediately for better UX
 
     try {
-      const response = await fetch('http://localhost:5000/api/chat/send', {
+      const response = await fetch(`${API_BASE_URL}/api/chat/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import './Community.css';
+import API_BASE_URL from './config';
 
 const Community = () => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ const Community = () => {
   const fetchPosts = async () => {
     if (!token) return;
     try {
-      const response = await fetch('http://localhost:5000/api/community', {
+      const response = await fetch(`${API_BASE_URL}/api/community`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -75,7 +76,7 @@ const Community = () => {
 
   const sendPostToBackend = async (postData) => {
     try {
-      const response = await fetch('http://localhost:5000/api/community', {
+      const response = await fetch(`${API_BASE_URL}/api/community`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

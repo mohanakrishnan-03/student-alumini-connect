@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatBot.css';
+import API_BASE_URL from './config';
 
 const SUGGESTIONS = [
   "How do I improve my resume?",
@@ -14,7 +15,7 @@ const ChatBot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const chatBoxRef = useRef(null);
 
-  const API_URL = 'http://localhost:5000/api/chat';
+  const API_URL = `${API_BASE_URL}/api/chat`;
 
   useEffect(() => {
     if (chatBoxRef.current) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from './contexts/AuthContext';
 import './ResumeAnalyzer.css';
+import API_BASE_URL from './config';
 
 const ResumeAnalyzer = () => {
   const { isGuest } = useAuth();
@@ -10,7 +11,7 @@ const ResumeAnalyzer = () => {
   const [error, setError] = useState('');
 
   // Backend API URL
-  const API_URL = 'http://localhost:5000/api/analyze-resume';
+  const API_URL = `${API_BASE_URL}/api/analyze-resume`;
 
   const handleFileUpload = async (file) => {
     if (!file) return;
@@ -95,7 +96,7 @@ const ResumeAnalyzer = () => {
   // Test backend connection
   const testBackendConnection = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/health');
+      const response = await fetch(`${API_BASE_URL}/api/health`);
       const result = await response.json();
       alert(`Backend connection: ${result.status}\n${result.message}`);
     } catch (error) {
