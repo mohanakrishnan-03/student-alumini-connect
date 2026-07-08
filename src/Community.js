@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import './Community.css';
@@ -42,7 +42,7 @@ const Community = () => {
   }, [token, getAllUsers]);
 
   // Fetch community posts
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     if (!token) return;
     try {
       const response = await fetch(`${API_BASE_URL}/api/community`, {
@@ -55,7 +55,7 @@ const Community = () => {
     } catch (error) {
       console.error('Error fetching community posts:', error);
     }
-  };
+  }, [token]);
 
   // Poll for real-time updates
   useEffect(() => {
@@ -72,7 +72,7 @@ const Community = () => {
     return () => {
       if (pollInterval.current) clearInterval(pollInterval.current);
     };
-  }, [token]);
+  }, [fetchPosts]);
 
   const sendPostToBackend = async (postData) => {
     try {

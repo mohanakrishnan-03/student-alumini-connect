@@ -1,5 +1,4 @@
-// src/Profile.js - Complete file with no scrolling and matching back button
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import './Profile.css';
@@ -12,14 +11,7 @@ const Profile = () => {
   const [editForm, setEditForm] = useState({});
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Load fresh data when component mounts
-    if (user?.id) {
-      refreshProfile();
-    }
-  }, [user?.id]);
-
-  const refreshProfile = async () => {
+  const refreshProfile = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -34,7 +26,14 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id, fetchUserProfile]);
+
+  useEffect(() => {
+    // Load fresh data when component mounts
+    if (user?.id) {
+      refreshProfile();
+    }
+  }, [user?.id, refreshProfile]);
 
   const handleEditToggle = () => {
     if (isEditing) {

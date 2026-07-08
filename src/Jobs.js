@@ -128,12 +128,12 @@ const JobOffersPortal = () => {
     // Simulate file processing and extraction
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // In real implementation, you would:
       // 1. Upload file to server
       // 2. Extract data from the document (PDF/text parsing)
       // 3. Add to offers list
-      
+
       const newOffer = {
         id: offers.length + 1,
         company: 'New Company', // Extracted from document
@@ -155,7 +155,7 @@ const JobOffersPortal = () => {
       setUploadedFile(null);
       setShowUploadModal(false);
       alert('Job offer uploaded successfully! It will be visible after processing.');
-      
+
     } catch (error) {
       alert('Error uploading file. Please try again.');
     } finally {
@@ -350,7 +350,7 @@ const JobOffersPortal = () => {
             <h3 style={styles.emptyTitle}>No job offers yet</h3>
             <p style={styles.emptyText}>Be the first to share a job opportunity!</p>
             {isAlumni() && (
-              <button 
+              <button
                 style={styles.createFirstBtn}
                 onClick={() => setShowUploadModal(true)}
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
@@ -392,7 +392,7 @@ const JobOffersPortal = () => {
               <div style={styles.jobMeta}>
                 <span style={styles.metaTag}>📍 {offer.location}</span>
                 <span style={styles.metaTag}>🕒 {offer.type}</span>
-                <span style={{...styles.metaTag, ...styles.salaryTag}}>💰 {offer.salary}</span>
+                <span style={{ ...styles.metaTag, ...styles.salaryTag }}>💰 {offer.salary}</span>
                 <span style={styles.metaTag}>📊 {offer.experience}</span>
               </div>
 
@@ -409,14 +409,17 @@ const JobOffersPortal = () => {
                   📧 {offer.contactEmail} • 📅 {offer.postedDate}
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <a href="#" style={styles.documentBadge}>
+                  <button
+                    type="button"
+                    style={styles.documentBadge}
+                  >
                     📎 {offer.document}
-                  </a>
+                  </button>
                   {isStudent() && (
-                    <button 
+                    <button
                       style={{
-                        background: 'rgba(39, 174, 96, 0.2)', 
-                        color: '#2ecc71', 
+                        background: 'rgba(39, 174, 96, 0.2)',
+                        color: '#2ecc71',
                         border: '1px solid rgba(46, 204, 113, 0.3)',
                         padding: '0.4rem 1rem',
                         borderRadius: '6px',
@@ -441,7 +444,7 @@ const JobOffersPortal = () => {
         <div style={styles.modalOverlay} onClick={() => setShowUploadModal(false)}>
           <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <h3 style={styles.modalTitle}>Upload Job Offer Document</h3>
-            
+
             <div
               style={styles.uploadArea}
               onClick={() => document.getElementById('fileInput').click()}
