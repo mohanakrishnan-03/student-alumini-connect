@@ -180,11 +180,8 @@ const Profile = () => {
             </div>
             
             <div className="detail-grid">
-              <div className="detail-item">
-                <label>College ID</label>
-                <p className="detail-value">{user.collegeId || 'Not provided'}</p>
-              </div>
-              
+
+
               {/* Student Specific Details */}
               {user.userType === 'student' && (
                 <>

@@ -13,7 +13,6 @@ router.post('/register', async (req, res) => {
       password, 
       fullName, 
       userType, 
-      collegeId,
       yearOfStudy, 
       branch, 
       graduationYear, 
@@ -27,11 +26,6 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-    // Check if collegeId already exists
-    const existingCollegeId = await User.findOne({ collegeId });
-    if (existingCollegeId) {
-      return res.status(400).json({ message: 'College ID already registered' });
-    }
 
     // Create new user
     const user = new User({
@@ -39,7 +33,6 @@ router.post('/register', async (req, res) => {
       password,
       fullName,
       userType,
-      collegeId,
       yearOfStudy,
       branch,
       graduationYear,
@@ -65,7 +58,6 @@ router.post('/register', async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
-        collegeId: user.collegeId,
         yearOfStudy: user.yearOfStudy,
         branch: user.branch,
         graduationYear: user.graduationYear,
@@ -114,7 +106,6 @@ router.post('/login/student', async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
-        collegeId: user.collegeId,
         yearOfStudy: user.yearOfStudy,
         branch: user.branch,
         graduationYear: user.graduationYear,
@@ -163,7 +154,6 @@ router.post('/login/alumni', async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
-        collegeId: user.collegeId,
         yearOfStudy: user.yearOfStudy,
         branch: user.branch,
         graduationYear: user.graduationYear,
@@ -210,7 +200,6 @@ router.post('/login', async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
-        collegeId: user.collegeId,
         yearOfStudy: user.yearOfStudy,
         branch: user.branch,
         graduationYear: user.graduationYear,
@@ -254,7 +243,6 @@ router.get('/profile/:id', auth, async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
-        collegeId: user.collegeId,
         yearOfStudy: user.yearOfStudy,
         branch: user.branch,
         graduationYear: user.graduationYear,
@@ -283,7 +271,6 @@ router.put('/profile', auth, async (req, res) => {
     // Remove fields that shouldn't be updated
     delete updates.email;
     delete updates.password;
-    delete updates.collegeId;
     delete updates.userType;
     delete updates._id;
     delete updates.id;
@@ -309,7 +296,6 @@ router.put('/profile', auth, async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
-        collegeId: user.collegeId,
         yearOfStudy: user.yearOfStudy,
         branch: user.branch,
         graduationYear: user.graduationYear,

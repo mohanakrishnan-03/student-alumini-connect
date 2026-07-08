@@ -285,7 +285,11 @@
   border-radius: 18px;
   line-height: 1.55;
   font-size: 0.9rem;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  white-space: normal;
+  width: fit-content;
+  max-width: 100%;
 }
 .message-bubble.user {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
@@ -356,6 +360,7 @@
 }
 .input-wrapper input {
   flex: 1;
+  min-width: 0;
   background: transparent;
   border: none;
   outline: none;

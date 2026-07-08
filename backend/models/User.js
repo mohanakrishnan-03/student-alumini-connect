@@ -22,10 +22,6 @@ const userSchema = new mongoose.Schema({
     enum: ['student', 'alumni'],
     required: true
   },
-  collegeId: {
-    type: String,
-    required: true
-  },
   // Student specific fields
   yearOfStudy: String,
   branch: String,

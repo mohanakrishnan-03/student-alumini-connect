@@ -13,7 +13,6 @@ const RegistrationLogin = ({ userType }) => {
     email: '',
     password: '',
     fullName: '',
-    collegeId: '',
     yearOfStudy: '',
     branch: '',
     graduationYear: '',
@@ -87,19 +86,6 @@ const RegistrationLogin = ({ userType }) => {
                 required
                 disabled={loading}
                 placeholder="Enter your full name"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>College ID</label>
-              <input
-                type="text"
-                name="collegeId"
-                value={formData.collegeId}
-                onChange={handleChange}
-                required
-                disabled={loading}
-                placeholder="Enter your college ID"
               />
             </div>
           </div>
