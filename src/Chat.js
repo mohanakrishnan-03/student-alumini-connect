@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 import "./Chat.css";
@@ -6,15 +6,15 @@ import API_BASE_URL from "./config";
 
 const Chat = () => {
   const navigate = useNavigate();
-  const { token, getAllUsers, user, isGuest } = useAuth();
-  
+  const { token, getAllUsers } = useAuth();
+
   const [users, setUsers] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
   const [input, setInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [conversations, setConversations] = useState({});
   const [loadingUsers, setLoadingUsers] = useState(true);
-  
+
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const pollInterval = useRef(null);
@@ -34,10 +34,10 @@ const Chat = () => {
     if (token) {
       fetchUsers();
     }
-  }, [token]);
+  }, [token, getAllUsers]);
 
   // Fetch messages for active user
-  const fetchMessages = async (userId) => {
+  const fetchMessages = useCallback(async (userId) => {
     if (!token || !userId) return;
     try {
       const response = await fetch(`${API_BASE_URL}/api/chat/${userId}`, {
@@ -53,26 +53,26 @@ const Chat = () => {
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
-  };
+  }, [token]);
 
   // Poll for messages when activeUser changes
   useEffect(() => {
     if (activeUser) {
       fetchMessages(activeUser.id);
-      
+
       // Clear existing interval
       if (pollInterval.current) clearInterval(pollInterval.current);
-      
+
       // Start polling every 3 seconds for real-time feel
       pollInterval.current = setInterval(() => {
         fetchMessages(activeUser.id);
       }, 3000);
     }
-    
+
     return () => {
       if (pollInterval.current) clearInterval(pollInterval.current);
     };
-  }, [activeUser, token]);
+  }, [activeUser, fetchMessages]);
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
@@ -134,7 +134,7 @@ const Chat = () => {
     setTimeout(() => {
       document.querySelector('.send-btn').click();
     }, 100);
-    
+
     event.target.value = "";
   };
 
@@ -146,13 +146,13 @@ const Chat = () => {
 
   const getLastMessage = (userId) => {
     const userMessages = conversations[userId];
-    return userMessages && userMessages.length > 0 
-      ? userMessages[userMessages.length - 1].text 
+    return userMessages && userMessages.length > 0
+      ? userMessages[userMessages.length - 1].text
       : "No messages yet";
   };
 
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'online': return '#10B981';
       case 'away': return '#F59E0B';
       case 'offline': return '#9CA3AF';
@@ -188,7 +188,7 @@ const Chat = () => {
               <span className="search-icon">🔍</span>
             </div>
           </div>
-          
+
           <div className="users-list">
             {loadingUsers ? (
               <div style={{ padding: '20px', color: 'rgba(255,255,255,0.5)', textAlign: 'center' }}>Loading contacts...</div>
@@ -203,8 +203,8 @@ const Chat = () => {
                 >
                   <div className="user-avatar">
                     {u.name.charAt(0)}
-                    <span 
-                      className="status-dot" 
+                    <span
+                      className="status-dot"
                       style={{ backgroundColor: getStatusColor(u.status) }}
                     ></span>
                   </div>
@@ -252,7 +252,7 @@ const Chat = () => {
               <div className="date-separator">
                 <span>Today</span>
               </div>
-              
+
               {conversations[activeUser.id]?.map((msg) => (
                 <div
                   key={msg.id}
@@ -272,8 +272,8 @@ const Chat = () => {
 
             <div className="chat-window-input">
               <div className="input-tools">
-                <label 
-                  htmlFor="fileInput" 
+                <label
+                  htmlFor="fileInput"
                   className="tool-btn"
                   title="Attach file"
                 >
@@ -290,7 +290,7 @@ const Chat = () => {
                 <button className="tool-btn" title="Emoji">😊</button>
                 <button className="tool-btn" title="Voice message">🎤</button>
               </div>
-              
+
               <input
                 type="text"
                 placeholder="Type your message here..."
@@ -299,9 +299,9 @@ const Chat = () => {
                 onKeyPress={handleKeyPress}
                 className="message-input"
               />
-              
-              <button 
-                onClick={sendMessage} 
+
+              <button
+                onClick={sendMessage}
                 className="send-btn"
                 disabled={!input.trim()}
               >
