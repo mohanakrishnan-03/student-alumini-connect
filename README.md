@@ -12,7 +12,7 @@ The Alumni Portal provides a simple digital platform where alumni can stay in to
 
 ## Live Demo
 
-Frontend: http://localhost:3000  
+https://student-alumini-connect.vercel.app/ 
 
 ---
 
