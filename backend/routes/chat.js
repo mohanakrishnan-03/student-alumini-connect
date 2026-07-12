@@ -1,6 +1,8 @@
 const express = require('express');
 const Message = require('../models/Message');
+const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { censorText } = require('../utils/profanityFilter');
 
 const router = express.Router();
 
@@ -49,10 +51,21 @@ router.post('/send', auth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Receiver and text are required' });
     }
 
+    const { text: cleanText, hasProfanity } = censorText(text);
+
+    if (hasProfanity) {
+      const user = await User.findById(senderId);
+      if (user) {
+        user.flaggedCount = (user.flaggedCount || 0) + 1;
+        user.isFlagged = true;
+        await user.save();
+      }
+    }
+
     const newMessage = new Message({
       sender: senderId,
       receiver: receiverId,
-      text: text
+      text: cleanText
     });
 
     await newMessage.save();

@@ -9,6 +9,9 @@ const ResumeAnalyzer = () => {
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState('');
+  const [targetCompany, setTargetCompany] = useState('Generic');
+  const [customCompany, setCustomCompany] = useState('');
+  const [targetRole, setTargetRole] = useState('');
 
   // Backend API URL
   const API_URL = `${API_BASE_URL}/api/analyze-resume`;
@@ -34,6 +37,8 @@ const ResumeAnalyzer = () => {
 
     const formData = new FormData();
     formData.append('resume', file);
+    formData.append('targetCompany', targetCompany === 'Other' ? customCompany : targetCompany);
+    formData.append('targetRole', targetRole);
 
     try {
       console.log('Sending request to backend...');
@@ -93,16 +98,7 @@ const ResumeAnalyzer = () => {
     return '#ef4444';
   };
 
-  // Test backend connection
-  const testBackendConnection = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/health`);
-      const result = await response.json();
-      alert(`Backend connection: ${result.status}\n${result.message}`);
-    } catch (error) {
-      alert('Unable to connect to the server. Please try again later.');
-    }
-  };
+
 
   // Back button functionality
   const handleGoBack = () => {
@@ -149,14 +145,9 @@ const ResumeAnalyzer = () => {
       </button>
       
       <div className="analyzer-header">
-        <h2>🤖 AI Resume Analyzer</h2>
+        <h2>AI Resume Analyzer</h2>
         <p>ML-powered analysis of your resume for ATS compatibility and content quality</p>
-        <button 
-          onClick={testBackendConnection}
-          className="test-connection-btn"
-        >
-          Test Backend Connection
-        </button>
+
       </div>
       
       {error && (
@@ -182,57 +173,151 @@ const ResumeAnalyzer = () => {
           <p>Please <a href="/" style={{color: '#3498db', textDecoration: 'underline'}}>log in</a> or sign up as a Student to use the AI Resume Analyzer.</p>
         </div>
       ) : !analysis ? (
-        <div 
-          className={`upload-area ${dragActive ? 'drag-active' : ''}`}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-        >
-          <input
-            type="file"
-            id="resume-upload"
-            accept=".pdf,.doc,.docx"
-            onChange={handleChange}
-            style={{ display: 'none' }}
-          />
-          
-          <div className="upload-content">
-            <div className="upload-icon">📄</div>
-            <h3>Upload Your Resume</h3>
-            <p>Drag & drop your resume here or click to browse</p>
-            <p className="file-types">Supported formats: PDF, DOC, DOCX</p>
-            <button 
-              className="upload-btn"
-              onClick={() => document.getElementById('resume-upload').click()}
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <div className="spinner"></div>
-                  AI Analyzing...
-                </>
-              ) : (
-                'Choose File'
-              )}
-            </button>
-            {loading && (
-              <div className="analyzing-text">
-                <p>🤖 ML model is analyzing your resume...</p>
-                <p>Extracting features, checking structure, and evaluating content</p>
+        <div className="targeting-and-upload-container" style={{ width: '100%' }}>
+          {/* Target Company & Role Selection UI */}
+          <div className="targeting-card" style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            padding: '20px',
+            marginBottom: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '15px',
+            textAlign: 'left',
+            backdropFilter: 'blur(10px)'
+          }}>
+            <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>🎯</span> Customize Target Company & Role
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#94a3b8' }}>Target Company</label>
+                <select 
+                  value={targetCompany} 
+                  onChange={(e) => setTargetCompany(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: '#1e293b',
+                    color: '#f8fafc',
+                    fontSize: '14px',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="Generic">Generic / General ATS</option>
+                  <option value="Google">Google</option>
+                  <option value="Microsoft">Microsoft</option>
+                  <option value="Amazon">Amazon</option>
+                  <option value="Meta">Meta</option>
+                  <option value="TCS / Infosys">TCS / Infosys (Service)</option>
+                  <option value="Tech Startup">Tech Startup</option>
+                  <option value="Other">Other (Custom)</option>
+                </select>
               </div>
-            )}
+
+              {targetCompany === 'Other' && (
+                <div>
+                  <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#94a3b8' }}>Company Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Netflix" 
+                    value={customCompany}
+                    onChange={(e) => setCustomCompany(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      background: '#1e293b',
+                      color: '#f8fafc',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+              )}
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#94a3b8' }}>Target Role / Tech Stack</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Frontend Engineer" 
+                  value={targetRole}
+                  onChange={(e) => setTargetRole(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: '#1e293b',
+                    color: '#f8fafc',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div 
+            className={`upload-area ${dragActive ? 'drag-active' : ''}`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <input
+              type="file"
+              id="resume-upload"
+              accept=".pdf,.doc,.docx"
+              onChange={handleChange}
+              style={{ display: 'none' }}
+            />
+            
+            <div className="upload-content">
+              <div className="upload-icon">📄</div>
+              <h3>Upload Your Resume</h3>
+              <p>Drag & drop your resume here or click to browse</p>
+              <p className="file-types">Supported formats: PDF, DOC, DOCX</p>
+              <button 
+                className="upload-btn"
+                onClick={() => document.getElementById('resume-upload').click()}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="spinner"></div>
+                    AI Analyzing...
+                  </>
+                ) : (
+                  'Choose File'
+                )}
+              </button>
+              {loading && (
+                <div className="analyzing-text">
+                  <p>ML model is analyzing your resume...</p>
+                  <p>Extracting features, checking structure, and evaluating content</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
         <div className="analysis-results">
           <div className="results-header">
-            <h3>🤖 AI Analysis Complete</h3>
-            <div>
-              <small>File: {analysis.file_processed}</small>
+            <h3>AI Analysis Complete</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
+              <small style={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: '0.85rem' }}>File: {analysis.file_processed}</small>
               <button 
                 onClick={() => setAnalysis(null)} 
                 className="analyze-another-btn"
+                style={{ whiteSpace: 'nowrap' }}
               >
                 Analyze Another Resume
               </button>

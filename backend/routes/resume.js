@@ -70,6 +70,10 @@ router.post('/analyze-resume', upload.single('resume'), async (req, res) => {
     }
 
     const fileName = req.file.originalname;
+    const { targetCompany, targetRole } = req.body;
+    const company = targetCompany || 'Generic';
+    const role = targetRole || 'General Candidate';
+
     let fileContent = '';
 
     if (req.file.mimetype === 'application/pdf') {
@@ -78,7 +82,9 @@ router.post('/analyze-resume', upload.single('resume'), async (req, res) => {
       fileContent = req.file.buffer.toString('utf-8', 0, Math.min(req.file.buffer.length, 8000));
     }
 
-    const prompt = `You are a professional resume analyzer. Analyze the following resume content.
+    const prompt = `You are a professional resume analyzer. Analyze the following resume content specifically tailored for a candidate targeting the company: "${company}" and role: "${role}".
+Evaluate how well the resume content aligns with the typical requirements, tech stack, and engineering standard bar of "${company}" for a "${role}" position. Adjust the score, breakdown scores, and recommendations accordingly.
+
 You MUST reply with ONLY a valid JSON object matching this exact structure:
 {
   "overall_score": 85,
@@ -92,9 +98,9 @@ You MUST reply with ONLY a valid JSON object matching this exact structure:
     "ats_compatibility": { "label": "ATS Compatibility", "score": 88 }
   },
   "feedback": {
-    "strengths": ["Clear structure", "Good keywords"],
-    "improvements": ["Add more metrics", "Fix typos"],
-    "suggestions": ["Include a summary section"]
+    "strengths": ["Strong alignment with ${company}'s standards", "Good keywords relating to ${role}"],
+    "improvements": ["Highlight specific skills needed for ${role}", "Add more quantitative metrics"],
+    "suggestions": ["Optimize summary objective towards ${company}"]
   },
   "extracted_text_preview": "first 300 chars..."
 }

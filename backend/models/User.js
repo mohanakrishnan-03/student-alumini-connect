@@ -28,7 +28,16 @@ const userSchema = new mongoose.Schema({
   // Alumni specific fields
   graduationYear: Number,
   company: String,
-  position: String
+  position: String,
+  // Moderation fields
+  flaggedCount: {
+    type: Number,
+    default: 0
+  },
+  isFlagged: {
+    type: Boolean,
+    default: false
+  }
 }, {
   timestamps: true
 });

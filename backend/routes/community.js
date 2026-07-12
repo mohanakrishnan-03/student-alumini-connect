@@ -1,6 +1,8 @@
 const express = require('express');
 const CommunityPost = require('../models/CommunityPost');
+const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { censorText } = require('../utils/profanityFilter');
 
 const router = express.Router();
 
@@ -61,9 +63,20 @@ router.post('/', auth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Message content is required' });
     }
 
+    const { text: cleanContent, hasProfanity } = censorText(content);
+
+    if (hasProfanity) {
+      const user = await User.findById(userId);
+      if (user) {
+        user.flaggedCount = (user.flaggedCount || 0) + 1;
+        user.isFlagged = true;
+        await user.save();
+      }
+    }
+
     const newPost = new CommunityPost({
       user: userId,
-      content,
+      content: cleanContent,
       type: type || 'text',
       fileName,
       fileSize
